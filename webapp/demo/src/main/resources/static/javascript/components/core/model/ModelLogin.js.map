@@ -1,0 +1,1 @@
+{"version":3,"file":"ModelLogin.js","sourceRoot":"","sources":["../../../../../../../../client/src/components/core/model/ModelLogin.ts"],"names":[],"mappings":";;AAAA,MAAqB,UAAU;IAG3B,YAAY,MAAc;QACtB,IAAI,CAAC,MAAM,GAAG,MAAM,CAAA;IACxB,CAAC;IAEM,SAAS,CAAC,OAA2B;QACxC,IAAI,OAAO,EAAE,CAAC;YACV,OAAO,CAAC,SAAS,GAAG,IAAI,CAAC,MAAM,CAAA;QACnC,CAAC;IACL,CAAC;CACJ;AAZD,6BAYC"}

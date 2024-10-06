@@ -19,4 +19,9 @@ module.exports = {
     path: path.resolve(__dirname, '../src/main/resources/static/javascript'),
   },
   mode: 'development',
+  devtool: 'inline-source-map',
+  devServer: {
+    port: 4200,
+    historyApiFallback: true,
+  }
 }
