@@ -1,7 +1,12 @@
 const path = require('path')
 
 module.exports = {
+  mode: 'development',
   entry: './src/components/core/login.ts',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, '../src/main/resources/static/javascript'),
+  },
   module: {
     rules: [
       {
@@ -14,14 +19,11 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js']
   },
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, '../src/main/resources/static/javascript'),
-  },
-  mode: 'development',
-  devtool: 'inline-source-map',
   devServer: {
+    static: {
+      directory: path.resolve(__dirname, '../src/main/resources/templates'),
+    },
     port: 4200,
-    historyApiFallback: true,
+    historyApiFallback: false,
   }
-}
+} 
