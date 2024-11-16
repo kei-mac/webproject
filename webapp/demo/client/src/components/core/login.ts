@@ -1,7 +1,3 @@
-import Greeting from "./model/ModelLogin";
 
-const demo: HTMLElement | null = document.getElementById("demo");
-
-const phrase = new Greeting("Hello world");
-
-phrase.sayPhrase(demo);
+// ページ読み込み時に自動的にlogin.htmlにリダイレクト
+window.location.href = "./login.html";

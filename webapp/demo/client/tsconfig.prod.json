@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json", // 基本設定を参照
+  "compilerOptions": {
+      "outDir": "../src/main/resources/static/js/components", // 出力ディレクトリ
+      "sourceMap": false, // 本番用ではソースマップを生成しない
+      "strict": true // 厳密な型チェック
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

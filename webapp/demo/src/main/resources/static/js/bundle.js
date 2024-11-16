@@ -1,0 +1,1 @@
+(()=>{"use strict";alert("login.jsの呼び出しに成功しました。")})();
