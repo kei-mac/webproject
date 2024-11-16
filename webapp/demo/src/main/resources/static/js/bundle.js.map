@@ -1,0 +1,1 @@
+{"version":3,"file":"bundle.js","mappings":";;;;;;AACA,iCAAiC;AACjC,MAAM,CAAC,QAAQ,CAAC,IAAI,GAAG,cAAc,CAAC","sources":["webpack://client/./src/components/core/login.ts"],"sourcesContent":["\r\n// ページ読み込み時に自動的にlogin.htmlにリダイレクト\r\nwindow.location.href = \"./login.html\";"],"names":[],"sourceRoot":""}

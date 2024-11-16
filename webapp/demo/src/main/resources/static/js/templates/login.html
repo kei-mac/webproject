@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="icon" type="image/png" href="./logo/logo.png">
+    <script src="/js/components/common/button/getButtonAction.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 左側の青いライン -->
+        <div class="sidebar"></div>
+
+        <!-- ログインボックス -->
+        <div class="login-box">
+            <img src="./logo/logo.png" alt="ロゴ" class="logo"> <!-- ロゴ画像 -->
+            <h2>業務系システム</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">ユーザ名</label>
+                    <input type="text" id="username" name="username" placeholder="ユーザ名を入力してください" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">パスワード</label>
+                    <input type="password" id="password" name="password" placeholder="パスワードを入力してください" required>
+                </div>
+                <button type="button" id="loginButton" class="login-button">ログイン</button>
+                <button type="button" id="registerButton" class="register-button">新規登録</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

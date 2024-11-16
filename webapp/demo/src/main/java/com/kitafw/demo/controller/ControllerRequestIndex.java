@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 /**
  * index.html コントローラクラス
  * 
+ * inex.htmlからログイン画面を表示するコントローラクラス
+ * 
  */
 @Controller
 public class ControllerRequestIndex {

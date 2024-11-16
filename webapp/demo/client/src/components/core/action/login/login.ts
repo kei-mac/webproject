@@ -17,14 +17,14 @@ if (registerButton) {
 // ******************************************************************************************************** //
 
 // ログイン処理関数
-function handleLogin(): void {
+function handleLoginq(): void {
     // ログインボタンがクリックされた時の処理
     console.log("ログインボタンがクリックされました");
     // 他の処理をここに追加
 }
 
 // 新規登録処理関数
-function handleRegister(): void {
+function handleRegisterq(): void {
     // 新規登録ボタンがクリックされた時の処理
     console.log("新規登録ボタンがクリックされました");
     // 他の処理をここに追加
