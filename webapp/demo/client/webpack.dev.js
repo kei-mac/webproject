@@ -1,14 +1,33 @@
 const path = require('path');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = merge(common, {
   devtool: 'source-map',  // ソースマップを生成
   mode: 'development',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, './build/static/js'), // 開発用の出力先
+    path: path.resolve(__dirname, './build/static/js/components'), // 開発用の出力先
   },
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/templates'), // コピー元
+          to: path.resolve(__dirname, 'build/static/js/templates'),  // コピー先
+        },
+        {
+          from: path.resolve(__dirname, 'templates'), // コピー元
+          to: path.resolve(__dirname, 'build/templates'),  // コピー先
+        },
+        {
+          from: path.resolve(__dirname, 'templates/css'), // コピー元
+          to: path.resolve(__dirname, 'build/static/css'),  // コピー先
+        }
+      ],
+    }),
+  ],
   devServer: {
     static:[
       {
@@ -20,8 +39,11 @@ module.exports = merge(common, {
       {
         directory: path.resolve(__dirname, './build/templates'), // HTMLのディレクトリ指定
       },
+      {
+        directory: path.resolve(__dirname, './build/static/js'), //　buildディレクトリ
+      },
     ],
     port: 4200,
-    historyApiFallback: false,
+    historyApiFallback: true,
   },
 });

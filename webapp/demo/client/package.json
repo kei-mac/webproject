@@ -10,12 +10,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:dev": "webpack --config webpack.dev.js && tsc -p tsconfig.json",
     "build:prod": "webpack --config webpack.prod.js && tsc -p tsconfig.prod.json",
-    "webpack": "tsc -p tsconfig.json && webpack-cli serve --config webpack.dev.js && webpack --config webpack.dev.js && webpack --config webpack.prod.js && tsc -p tsconfig.prod.json  && tsc --watch"
+    "webpack": "tsc -p tsconfig.json && webpack-cli server --config webpack.dev.js && webpack --config webpack.dev.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "copy-webpack-plugin": "^12.0.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",
     "webpack": "^5.96.1",

@@ -3,5 +3,22 @@
     "target": "es2016", 
     "experimentalDecorators": true, 
     "module": "commonjs",
+    "removeComments": true,
+    "noEmitOnError": true,
+
+    /* Strict Type-Checking Options */
+    "strict": true,
+
+    /* Additional Checks */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+
+    /* Module Resolution Options */
+    "esModuleInterop": true,
+
+    /* Advanced Options */
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   }
 }

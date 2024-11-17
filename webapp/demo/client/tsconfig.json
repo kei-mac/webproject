@@ -1,11 +1,10 @@
 {
   "extends": "./tsconfig.base.json", // 基本設定を参照
   "compilerOptions": {
-      "outDir": "./build/static/js/components", // componentsフォルダ出力ディレクトリ
+      "outDir": "./build/static/js", // componentsフォルダ出力ディレクトリ
       "sourceMap": true, // ソースマップの生成
-      "rootDir": "./src",
-      "strict": true, // 厳密な型チェック
+      "rootDir": "./src"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules","build"]
 }
