@@ -2,13 +2,14 @@ const path = require('path');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = merge(common, {
   devtool: 'source-map',  // ソースマップを生成
   mode: 'development',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, './build/static/js/components'), // 開発用の出力先
+    path: path.resolve(__dirname, './build/static/js'), // 開発用の出力先
   },
   plugins: [
     new CopyWebpackPlugin({
@@ -24,8 +25,12 @@ module.exports = merge(common, {
         {
           from: path.resolve(__dirname, 'templates/css'), // コピー元
           to: path.resolve(__dirname, 'build/static/css'),  // コピー先
-        }
+        },
       ],
+    }),
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[file].map',
+      sourceRoot: '/src/',  // ここで指定
     }),
   ],
   devServer: {
