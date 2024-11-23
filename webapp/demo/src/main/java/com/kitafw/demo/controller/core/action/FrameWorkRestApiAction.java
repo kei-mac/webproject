@@ -32,7 +32,7 @@ public class FrameWorkRestApiAction {
      */
     @PostMapping("/search")
     public String requestApiSerch(@RequestBody Map<String, Object> operationRequest) {
-        
+        // データ名、アクション名を取得
         return "OK";
     }
 
@@ -76,5 +76,23 @@ public class FrameWorkRestApiAction {
     public String requestApiDelete(@RequestBody Map<String, Object> operationRequest) {
 
         return "OK";
+    }
+
+    /**
+     * クラス実行処理
+     * 
+     * アクション明細に定義されているクラスとメソッドを実行する処理
+     */
+    public void runClassMethod(){
+        // データ名とアクション名を取得
+
+        // 表示順序でクラス名とメソッド名を取得
+
+        // 削除状態がＯＮであるかをチェックする。
+
+        // 削除状態がＯＮの場合次の処理を継続する。
+
+        // クラスのメソッドを実行する。
+
     }
 }
