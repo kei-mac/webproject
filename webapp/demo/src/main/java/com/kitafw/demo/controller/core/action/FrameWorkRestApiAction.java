@@ -1,13 +1,12 @@
 package com.kitafw.demo.controller.core.action;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.kitafw.demo.controller.core.model.FrameWorkRestApiActionModel;
-
 
 /*
  * クラス名 ：RESTApiクラス
@@ -19,70 +18,63 @@ import com.kitafw.demo.controller.core.model.FrameWorkRestApiActionModel;
 @RestController
 @RequestMapping("/api")
 public class FrameWorkRestApiAction {
-    
-    // application.properties からエンドポイント名を取得
-    @Value("${api.endpoint.name}")
-    private String endpointName;
+
+    @Value("${myapp.cors.allowed-origins}")
+    private String allowedOrigins;
 
     /**
-     * 操作種別に応じて処理を分岐する共通のAPIエンドポイント
+     * 検索処理の場合
+     * 
+     * 検索処理のリクエスト処理を受信した場合の処理
      * 
      * @param operationRequest 操作内容を含むリクエストボディ
      * @return 処理結果
      */
-    @PostMapping("${api.endpoint.name}")
-    public String handleOperation(@RequestBody FrameWorkRestApiActionModel operationRequest) {
-        switch (operationRequest.getType()) {
-            case "search":
-                return search(operationRequest.getSearchCriteria());
-            case "create":
-                return create(operationRequest.getId());
-            case "update":
-                return update(operationRequest.getId());
-            case "delete":
-                return delete(operationRequest.getId());
-            default:
-                return "Invalid operation type";
-        }
+    @PostMapping("/search")
+    public String requestApiSerch(@RequestBody Map<String, Object> operationRequest) {
+        
+        return "OK";
     }
 
     /**
-     * 検索処理
-     * @param searchCriteria 検索条件
-     * @return 検索結果
+     * 追加処理の場合
+     * 
+     * 追加処理のリクエスト処理を受信した場合の処理
+     * 
+     * @param operationRequest 操作内容を含むリクエストボディ
+     * @return 処理結果
      */
-    private String search(String searchCriteria) {
-        // 検索ロジックをここに実装
-        return "Search result for: " + searchCriteria;
+    @PostMapping("/add")
+    public String requestApiadd(@RequestBody Map<String, Object> operationRequest) {
+
+        return "OK";
     }
 
     /**
-     * 追加処理
-     * @param data 追加するデータ
-     * @return 追加結果
+     * 更新処理の場合
+     * 
+     * 更新処理のリクエスト処理を受信した場合の処理
+     * 
+     * @param operationRequest 操作内容を含むリクエストボディ
+     * @return 処理結果
      */
-    private String create(String data) {
-        // 追加ロジックをここに実装
-        return "Created: " + data;
+    @PostMapping("/update")
+    public String requestApiUpdate(@RequestBody Map<String, Object> operationRequest) {
+
+        return "OK";
     }
 
     /**
-     * 更新処理
-     * @param data 更新するデータ
-     * @return 更新結果
+     * 削除処理の場合
+     * 
+     * 削除処理のリクエスト処理を受信した場合の処理
+     * 
+     * @param operationRequest 操作内容を含むリクエストボディ
+     * @return 処理結果
      */
-    private String update(String data) {
-        // 更新ロジックをここに実装
-        return "Updated: " + data;
-    }
+    @PostMapping("/delete")
+    public String requestApiDelete(@RequestBody Map<String, Object> operationRequest) {
 
-    /**
-     * 削除処理
-     * @param id 削除対象のID
-     * @return 削除結果
-     */
-    private String delete(String id) {
-        // 削除ロジックをここに実装
-        return "Deleted: " + id;
+        return "OK";
     }
 }

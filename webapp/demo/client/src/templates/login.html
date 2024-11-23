@@ -6,7 +6,7 @@
     <title>Login</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="icon" type="image/png" href="./logo/logo.png">
-    <script src="/js/components/core/common/button/getButtonAction.js" defer></script>
+    <script src="../components/core/common/button/getButtonAction.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -14,7 +14,7 @@
         <div class="sidebar"></div>
 
         <!-- ログインボックス -->
-        <div class="login-box">
+        <div class="login-box"> 
             <img src="./logo/logo.png" alt="ロゴ" class="logo"> <!-- ロゴ画像 -->
             <h2>業務系システム</h2>
             <form id="loginForm">
@@ -26,7 +26,7 @@
                     <label for="password">パスワード</label>
                     <input type="password" id="password" name="password" placeholder="パスワードを入力してください" required>
                 </div>
-                <button type="button" id="loginButton" class="login-button">ログイン</button>
+                <button type="button" id="loginButton" data-api-type="search" class="login-button">ログイン</button>
                 <button type="button" id="registerButton" class="register-button">新規登録</button>
             </form>
         </div>

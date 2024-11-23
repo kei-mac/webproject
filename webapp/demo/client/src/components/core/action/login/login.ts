@@ -5,13 +5,13 @@
 // ログインボタンのクリックイベント
 const loginButton = document.getElementById('loginButton') as HTMLButtonElement | null;
 if (loginButton) {
-    loginButton.addEventListener('click', handleLogin);
+    loginButton.addEventListener('click', handleLoginq);
 }
 
 // 新規登録ボタンのクリックイベント
 const registerButton = document.getElementById('registerButton') as HTMLButtonElement | null;
 if (registerButton) {
-    registerButton.addEventListener('click', handleRegister);
+    registerButton.addEventListener('click', handleLoginq);
 }
 
 // ******************************************************************************************************** //
