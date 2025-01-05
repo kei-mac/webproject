@@ -42,7 +42,7 @@ public class ActionAbstract {
 
             return String.valueOf(CommonSystemEnum.FUNCTION_OK);
         } catch (Exception ex) {
-            log.error("アクションを実行できませんでした。データ名：{}, アクション名：", actionName);
+            log.error("アクションを実行できませんでした。データ名：{}, アクション名：", dataName, actionName);
             return String.valueOf(CommonSystemEnum.FUNCTION_NG);
         }
     }
