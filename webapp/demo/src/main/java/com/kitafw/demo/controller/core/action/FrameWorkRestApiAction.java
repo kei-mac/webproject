@@ -3,10 +3,17 @@ package com.kitafw.demo.controller.core.action;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.kitafw.demo.controller.core.constant.CommonSystemEnum;
+import com.kitafw.demo.controller.core.service.ActionAbstract;
+import com.kitafw.demo.controller.core.service.ActionCommon;
+
+import lombok.RequiredArgsConstructor;
 
 /*
  * クラス名 ：RESTApiクラス
@@ -17,23 +24,23 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class FrameWorkRestApiAction {
 
     @Value("${myapp.cors.allowed-origins}")
     private String allowedOrigins;
 
+    private final ActionAbstract actionAbstract;
     /**
      * 検索処理の場合
-     * 
      * 検索処理のリクエスト処理を受信した場合の処理
      * 
-     * @param operationRequest 操作内容を含むリクエストボディ
+     * @param requestParam 操作内容を含むリクエストボディ
      * @return 処理結果
      */
     @PostMapping("/search")
-    public String requestApiSerch(@RequestBody Map<String, Object> operationRequest) {
-        // データ名、アクション名を取得
-        return "OK";
+    public String requestApiSerch(@RequestBody Map<String, Object> requestParam) {
+        return this.actionAbstract.runAction(requestParam);
     }
 
     /**
@@ -41,13 +48,13 @@ public class FrameWorkRestApiAction {
      * 
      * 追加処理のリクエスト処理を受信した場合の処理
      * 
-     * @param operationRequest 操作内容を含むリクエストボディ
+     * @param requestParam 操作内容を含むリクエストボディ
      * @return 処理結果
      */
     @PostMapping("/add")
-    public String requestApiadd(@RequestBody Map<String, Object> operationRequest) {
+    public String requestApiadd(@RequestBody Map<String, Object> requestParam) {
 
-        return "OK";
+        return String.valueOf(CommonSystemEnum.FUNCTION_OK);
     }
 
     /**
@@ -55,13 +62,13 @@ public class FrameWorkRestApiAction {
      * 
      * 更新処理のリクエスト処理を受信した場合の処理
      * 
-     * @param operationRequest 操作内容を含むリクエストボディ
+     * @param requestParam 操作内容を含むリクエストボディ
      * @return 処理結果
      */
     @PostMapping("/update")
-    public String requestApiUpdate(@RequestBody Map<String, Object> operationRequest) {
+    public String requestApiUpdate(@RequestBody Map<String, Object> requestParam) {
 
-        return "OK";
+        return String.valueOf(CommonSystemEnum.FUNCTION_OK);
     }
 
     /**
@@ -69,13 +76,13 @@ public class FrameWorkRestApiAction {
      * 
      * 削除処理のリクエスト処理を受信した場合の処理
      * 
-     * @param operationRequest 操作内容を含むリクエストボディ
+     * @param requestParam 操作内容を含むリクエストボディ
      * @return 処理結果
      */
     @PostMapping("/delete")
-    public String requestApiDelete(@RequestBody Map<String, Object> operationRequest) {
+    public String requestApiDelete(@RequestBody Map<String, Object> requestParam) {
 
-        return "OK";
+        return String.valueOf(CommonSystemEnum.FUNCTION_OK);
     }
 
     /**
@@ -83,7 +90,7 @@ public class FrameWorkRestApiAction {
      * 
      * アクション明細に定義されているクラスとメソッドを実行する処理
      */
-    public void runClassMethod(){
+    public void runClassMethod() {
         // データ名とアクション名を取得
 
         // 表示順序でクラス名とメソッド名を取得

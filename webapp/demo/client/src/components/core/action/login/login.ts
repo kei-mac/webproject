@@ -20,7 +20,8 @@ if (registerButton) {
 function handleLoginq(): void {
     // ログインボタンがクリックされた時の処理
     console.log("ログインボタンがクリックされました");
-    // 他の処理をここに追加
+    
+    
 }
 
 // 新規登録処理関数

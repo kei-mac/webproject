@@ -20,6 +20,15 @@ body, html {
   bottom: 0;
 }
 
+/* 左のグレーのサイドバー*/
+.topSidebar {
+  width: 60px;
+  background-color: #364450;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
 /* ログインボックス */
 .container {
   display: flex;

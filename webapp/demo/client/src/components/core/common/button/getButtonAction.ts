@@ -3,6 +3,7 @@
 //      説明    ：ボタンのアクションを動的に取得する処理
 // ******************************************************************************************************** //
 
+
 // 全てのボタン要素を取得
 const buttons = document.querySelectorAll("button");
 
@@ -10,9 +11,8 @@ const buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
   button.addEventListener("click", async (event) => {
     const target = event.target as HTMLButtonElement;
-
-    // data-api-type 属性を取得
     const apiType = target.dataset.apiType;
+    const action = target.id;
 
     if (!apiType) {
       console.error("APIタイプが指定されていません");
@@ -23,19 +23,19 @@ buttons.forEach((button) => {
     switch (apiType) {
       case "search":
         // 検索ボタンの場合
-        await sendRequest(apiType);
+        await sendSearchRequest(apiType, action);
         break;
       case "add":
         // 追加ボタンの場合
-        await sendRequest(apiType);
+        await sendAddRequest(apiType);
         break;
       case "update":
         // 更新ボタンの場合
-        await sendRequest(apiType);
+        await sendUpdateRequest(apiType);
         break;
       case "delete":
         // 削除ボタンの場合
-        await sendRequest(apiType);
+        await sendDeleteRequest(apiType);
         break;
       default:
         console.error(`未定義のAPIタイプ: ${apiType}`);
@@ -45,8 +45,46 @@ buttons.forEach((button) => {
 
 /**
  * リクエスト送信処理
+ * 検索処理のリクエストをサーバに送信し、レスポンス処理を受信します。
+ * 
+ * @param apiType 
  */
-async function sendRequest(apiType: string) {
+async function sendSearchRequest(apiType: string, actionName: string) {
+  try {
+    // リクエストURL
+    const URL = "http://localhost:8080/api/" + apiType;
+
+    // FormDataをオブジェクトに変換
+    let data: Record<string, string> = getFormValuesAsJson(actionName);
+
+    // サーバーにPOSTリクエストを送信
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    // レスポンスの処理
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log('検索結果:', responseData);
+    } else {
+      console.error('検索処理に失敗しました:', response.statusText);
+    }
+  } catch (error) {
+    console.error('エラーが発生しました:', error);
+  }
+}
+
+/**
+ * 追加処理
+ * 追加処理のリクエスト処理
+ * 
+ * @param apiType :リクエストtype
+ */
+async function sendAddRequest(apiType: string) {
   try {
     // リクエストURL
     const URL = 'http://localhost:8080/api/' + apiType;
@@ -62,11 +100,11 @@ async function sendRequest(apiType: string) {
 
     // サーバーにPOSTリクエストを送信
     const response = await fetch(URL, {
-      method: 'POST',  // POSTメソッドを使用
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json',  // JSONデータを送信
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),  // オブジェクトをJSONに変換して送信
+      body: JSON.stringify(data),
     });
 
     // レスポンスの処理
@@ -79,36 +117,114 @@ async function sendRequest(apiType: string) {
   } catch (error) {
     console.error('エラーが発生しました:', error);
   }
-  }
-// // 各処理の実装
-// async function handleLogin() {
-//   console.log("ログインAPIを実行します");
-//   // REST API呼び出しの例
-//   const response = await fetch("/api/login", {
-//     method: "POST",
-//     body: JSON.stringify({ username: "test", password: "password" }),
-//     headers: { "Content-Type": "application/json" },
-//   });
-//   const result = await response.json();
-//   console.log("ログイン結果:", result);
-// }
-
-async function handleRegister() {
-  console.log("新規登録APIを実行します");
-  const response = await fetch("/api/register", {
-    method: "POST",
-    body: JSON.stringify({ username: "newUser", email: "email@example.com" }),
-    headers: { "Content-Type": "application/json" },
-  });
-  const result = await response.json();
-  console.log("登録結果:", result);
 }
 
-// async function handleSearch() {
-//   console.log("検索APIを実行します");
-//   const response = await fetch("/api/search", {
-//     method: "GET",
-//   });
-//   const result = await response.json();
-//   console.log("検索結果:", result);
-// }
+/**
+ * 更新処理
+ * 更新処理のリクエスト処理
+ * 
+ * @param apiType :リクエストtype
+ */
+async function sendUpdateRequest(apiType: string) {
+  try {
+    // リクエストURL
+    const URL = 'http://localhost:8080/api/' + apiType;
+
+    // フォームデータを取得（フォームのinputやtextareaなどから）
+    const formData = new FormData(document.querySelector('form') as HTMLFormElement);
+
+    // FormDataをオブジェクトに変換
+    const data: Record<string, string> = {};
+    formData.forEach((value, key) => {
+      data[key] = value.toString();
+    });
+
+    // サーバーにPOSTリクエストを送信
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    // レスポンスの処理
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log('検索結果:', responseData);
+    } else {
+      console.error('検索処理に失敗しました:', response.statusText);
+    }
+  } catch (error) {
+    console.error('エラーが発生しました:', error);
+  }
+}
+
+/**
+ * 削除処理
+ * 削除処理のリクエスト処理
+ * 
+ * @param apiType :リクエストtype
+ */
+async function sendDeleteRequest(apiType: string) {
+  try {
+    // リクエストURL
+    const URL = 'http://localhost:8080/api/' + apiType;
+
+    // フォームデータを取得（フォームのinputやtextareaなどから）
+    const formData = new FormData(document.querySelector('form') as HTMLFormElement);
+
+    // FormDataをオブジェクトに変換
+    const data: Record<string, string> = {};
+    formData.forEach((value, key) => {
+      data[key] = value.toString();
+    });
+
+    // サーバーにPOSTリクエストを送信
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    // レスポンスの処理
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log('検索結果:', responseData);
+    } else {
+      console.error('検索処理に失敗しました:', response.statusText);
+    }
+  } catch (error) {
+    console.error('エラーが発生しました:', error);
+  }
+}
+
+/**
+ * リクエスト値格納処理
+ * リクエストで使用する値を格納します。
+ * 
+ * @param actionName 
+ * @returns 
+ */
+function getFormValuesAsJson(actionName:string): Record<string, string> {
+  const formElements = document.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLFormElement>('input, select, textarea, form');
+  const formData: Record<string, string> = {};
+
+  // 画面入力値をJSON形式で取得する処理
+  formElements.forEach(element => {
+    const name = element.name;
+
+    if (name == 'data') {
+      formData[name] = element.id;
+    }
+    else {
+      formData[name] = element.value;
+    }
+  });
+
+  formData['action'] = actionName;
+  return formData;
+}
+
