@@ -1,14 +1,12 @@
-/**
- * ログイン画面作成処理
- */
-function main(): void {
+// ログインフォームを動的に作成する関数
+function createMainPage(): void {
     const container = document.getElementById('container') as HTMLDivElement;
 
     // 全体のコンテナを作成
     const mainContainer = document.createElement('div');
     mainContainer.classList.add('container');
     container.appendChild(mainContainer);
-
+    
     // ログインボックス
     const loginBox = document.createElement('div');
     loginBox.classList.add('login-box');
@@ -87,7 +85,8 @@ function main(): void {
     form.appendChild(registerButton);
 }
 
-function loadCSS(filename: string): void {
+
+function loadMainCSS(filename: string): void {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.type = 'text/css';
@@ -99,11 +98,4 @@ function loadCSS(filename: string): void {
 
     document.head.appendChild(link);
 }
-
-// ページ読み込み後にフォームを作成
-window.addEventListener('load', () => {
-    loadCSS('../../css/style.css');
-    console.log(__dirname);
-    main();
-});
 

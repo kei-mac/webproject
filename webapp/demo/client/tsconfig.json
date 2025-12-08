@@ -3,7 +3,6 @@
   "compilerOptions": {
       "outDir": "./build/static/js", // componentsフォルダ出力ディレクトリ
       "sourceMap": true, // ソースマップの生成
-      "rootDir": "./src"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules","build"]

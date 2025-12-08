@@ -3,15 +3,13 @@ package com.kitafw.demo.controller.core.action;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kitafw.demo.controller.core.constant.CommonSystemEnum;
-import com.kitafw.demo.controller.core.service.ActionAbstract;
-import com.kitafw.demo.controller.core.service.ActionCommon;
+import com.kitafw.demo.controller.core.service.action.ActionRun;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +28,7 @@ public class FrameWorkRestApiAction {
     @Value("${myapp.cors.allowed-origins}")
     private String allowedOrigins;
 
-    private final ActionAbstract actionAbstract;
+    private final ActionRun actionAbstract;
     /**
      * 検索処理の場合
      * 検索処理のリクエスト処理を受信した場合の処理

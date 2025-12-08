@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kitafw.demo.controller.core.mapper.ActionCoreMapper">
+
+    <select id="SelectActionResult"  resultType="com.kitafw.demo.controller.core.mapper.parameter.SelectActionResult">
+        SELECT
+          s_1 AS s_1_class_name
+          , s_2 AS s_2_method_name
+          , s_3 AS s_3_action_detail_name
+        FROM
+          ap_action_detail
+        WHERE
+          s_3 = #{data}
+          AND s_4 = #{action}
+        ORDER BY n_1
+    </select>
+</mapper>

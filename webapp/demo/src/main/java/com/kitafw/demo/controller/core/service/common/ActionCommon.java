@@ -1,4 +1,4 @@
-package com.kitafw.demo.controller.core.service;
+package com.kitafw.demo.controller.core.service.common;
 
 import java.util.Map;
 

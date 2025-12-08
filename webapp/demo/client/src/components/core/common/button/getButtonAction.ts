@@ -3,6 +3,7 @@
 //      説明    ：ボタンのアクションを動的に取得する処理
 // ******************************************************************************************************** //
 
+import { ScreenMain } from "../../model/ScreenMain.js";
 
 // 全てのボタン要素を取得
 const buttons = document.querySelectorAll("button");
@@ -37,6 +38,9 @@ buttons.forEach((button) => {
         // 削除ボタンの場合
         await sendDeleteRequest(apiType);
         break;
+      case "screen":
+      // 画面遷移の場合
+
       default:
         console.error(`未定義のAPIタイプ: ${apiType}`);
     }
@@ -69,8 +73,13 @@ async function sendSearchRequest(apiType: string, actionName: string) {
     // レスポンスの処理
     if (response.ok) {
       const responseData = await response.json();
+      const create = new ScreenMain();
+      create.createElement(responseData);
       console.log('検索結果:', responseData);
     } else {
+      // const create = new ScreenMain();
+      // const responseData = await response.json();
+      // create.createElement(responseData);
       console.error('検索処理に失敗しました:', response.statusText);
     }
   } catch (error) {
@@ -208,7 +217,7 @@ async function sendDeleteRequest(apiType: string) {
  * @param actionName 
  * @returns 
  */
-function getFormValuesAsJson(actionName:string): Record<string, string> {
+function getFormValuesAsJson(actionName: string): Record<string, string> {
   const formElements = document.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLFormElement>('input, select, textarea, form');
   const formData: Record<string, string> = {};
 
@@ -227,4 +236,3 @@ function getFormValuesAsJson(actionName:string): Record<string, string> {
   formData['action'] = actionName;
   return formData;
 }
-

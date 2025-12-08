@@ -7,6 +7,11 @@ const webpack = require('webpack');
 module.exports = merge(common, {
   devtool: 'source-map',  // ソースマップを生成
   mode: 'development',
+  resolve: {
+    alias: {
+      '@src': path.resolve(__dirname, 'src/'),
+    }
+  },  
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, './build/static/js'), // 開発用の出力先
@@ -30,7 +35,7 @@ module.exports = merge(common, {
     }),
     new webpack.SourceMapDevToolPlugin({
       filename: '[file].map',
-      sourceRoot: '/src/',  // ここで指定
+      // sourceRoot: '/src/',
     }),
   ],
   devServer: {

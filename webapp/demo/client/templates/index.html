@@ -4,12 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script th:src="@{/js/bundle.js}"></script> 
-    <title>Login</title>
+    <!-- <link rel="stylesheet" href="../../css/style.css"> -->
+    <title th:text="${pageTitle}">login</title>
+    <script type="module" src="../components/core/common/button/getButtonAction.js" defer></script>
 </head>
 
 <body>
-    <h1>ログイン画面に遷移します。</h1>
-    <script src="../static/js/bundle.js"></script>
+    <div id="container">
+        <script src="../static/js/bundle.js"></script>
+    </div>
+
 </body>
+
 </html>
