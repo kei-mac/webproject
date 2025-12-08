@@ -1,6 +1,8 @@
 /**
  * ログイン画面作成処理
  */
+import '../../styles/style.scss';
+
 function main(): void {
     const container = document.getElementById('container') as HTMLDivElement;
 
@@ -87,22 +89,8 @@ function main(): void {
     form.appendChild(registerButton);
 }
 
-function loadCSS(filename: string): void {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = filename;
-
-    link.onerror = () => {
-        console.error(`Failed to load CSS file: ${filename}`);
-    };
-
-    document.head.appendChild(link);
-}
-
 // ページ読み込み後にフォームを作成
 window.addEventListener('load', () => {
-    loadCSS('../../css/style.css');
     console.log(__dirname);
     main();
 });

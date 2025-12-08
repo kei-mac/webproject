@@ -16,6 +16,14 @@ module.exports = merge(common, {
     filename: 'bundle.js',
     path: path.resolve(__dirname, './build/static/js'), // 開発用の出力先
   },
+  module: {
+    rules: [
+      {
+        test: /\.(css|scss|sass)$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+    ],
+  },
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
@@ -26,10 +34,9 @@ module.exports = merge(common, {
         {
           from: path.resolve(__dirname, 'templates'), // コピー元
           to: path.resolve(__dirname, 'build/templates'),  // コピー先
-        },
-        {
-          from: path.resolve(__dirname, 'templates/css'), // コピー元
-          to: path.resolve(__dirname, 'build/static/css'),  // コピー先
+          globOptions: {
+            ignore: ['**/css/**'],
+          },
         },
       ],
     }),

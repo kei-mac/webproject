@@ -9,6 +9,11 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.scss$|\.sass$/,
+        // no loaders here; handled in dev/prod configs
+        exclude: /node_modules/,
+      },
     ],
   },
   resolve: {
