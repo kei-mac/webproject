@@ -1,238 +1,164 @@
-// ******************************************************************************************************** //
-//      処理名  ：ボタンアクション取得処理
-//      説明    ：ボタンのアクションを動的に取得する処理
-// ******************************************************************************************************** //
+// ********************************************************************************************************
+//      処理名  ：ボタンアクション共有処理
+//      説明    ：各画面のボタン押下時に呼び出す共通のリクエスト送信処理を提供します。
+//                - 初期化関数: initButtonActions
+//                - 汎用送信関数: sendAction
+//                画面側で任意に上書きできるコールバックを受け取れます。
+// ********************************************************************************************************
 
-import { ScreenMain } from "../../model/ScreenMain.js";
+import { postJson, getJson, ApiResponse } from '../request';
+import { handleApiResponse } from '../responseHandler';
 
-// 全てのボタン要素を取得
-const buttons = document.querySelectorAll("button");
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
-// 各ボタンにイベントリスナーを追加
-buttons.forEach((button) => {
-  button.addEventListener("click", async (event) => {
-    const target = event.target as HTMLButtonElement;
-    const apiType = target.dataset.apiType;
-    const action = target.id;
+type SendActionOptions = {
+  url?: string; // フルURLを渡すと apiType を無視します
+  method?: HttpMethod;
+  data?: Record<string, any>;
+  headers?: Record<string, string>;
+  onSuccess?: (res: any) => void;
+  onError?: (err: any) => void;
+  showLoading?: boolean;
+};
 
-    if (!apiType) {
-      console.error("APIタイプが指定されていません");
-      return;
+const DEFAULT_BASE = 'http://localhost:8080/api/';
+
+function showLoading() {
+  let el = document.getElementById('__global_loading_overlay');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = '__global_loading_overlay';
+    Object.assign(el.style, {
+      position: 'fixed',
+      left: '0',
+      top: '0',
+      width: '100%',
+      height: '100%',
+      background: 'rgba(0,0,0,0.2)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: '9999'
+    });
+    el.innerHTML = '<div style="padding:12px 20px;background:#fff;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.2)">処理中...</div>';
+    document.body.appendChild(el);
+  }
+}
+
+function hideLoading() {
+  const el = document.getElementById('__global_loading_overlay');
+  if (el && el.parentNode) el.parentNode.removeChild(el);
+}
+
+async function sendAction(apiTypeOrUrl: string, actionName: string, options: SendActionOptions = {}) {
+  const baseOrUrl = options.url ?? (DEFAULT_BASE + apiTypeOrUrl);
+  const method = options.method ?? 'POST';
+  const payload = options.data ?? getFormValuesAsJson(actionName);
+
+  if (options.showLoading ?? true) showLoading();
+
+    try {
+      // request.ts のユーティリティを使う
+  let res: ApiResponse<any>;
+  const requestUrl = baseOrUrl;
+
+      if (method === 'GET') {
+        res = await getJson(requestUrl);
+      } else {
+        res = await postJson(requestUrl, payload);
+      }
+
+      const handled = handleApiResponse(res, { onSuccess: options.onSuccess, onError: options.onError });
+      if (handled && (handled as any).error) return Promise.reject((handled as any).error);
+      return (handled as any).data;
+    } catch (error) {
+      (options.onError ?? defaultErrorHandler)(error);
+      return Promise.reject(error);
+    } finally {
+      if (options.showLoading ?? true) hideLoading();
     }
+}
 
-    // REST APIの種類を判定
-    switch (apiType) {
-      case "search":
-        // 検索ボタンの場合
-        await sendSearchRequest(apiType, action);
-        break;
-      case "add":
-        // 追加ボタンの場合
-        await sendAddRequest(apiType);
-        break;
-      case "update":
-        // 更新ボタンの場合
-        await sendUpdateRequest(apiType);
-        break;
-      case "delete":
-        // 削除ボタンの場合
-        await sendDeleteRequest(apiType);
-        break;
-      case "screen":
-      // 画面遷移の場合
+function defaultErrorHandler(err: any) {
+  console.error('通信エラー', err);
+  try {
+    // 画面上でエラーメッセージを表示したい場合はここで DOM 操作
+    alert('エラーが発生しました。詳細はコンソールを確認してください。');
+  } catch (e) {
+    // ignore
+  }
+}
 
-      default:
-        console.error(`未定義のAPIタイプ: ${apiType}`);
+/**
+ * ページ上の input/select/textarea/form から値を取得して JSON にする
+ */
+function getFormValuesAsJson(actionName: string): Record<string, any> {
+  const elements = document.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input[name], select[name], textarea[name]');
+  const data: Record<string, any> = {};
+  elements.forEach(el => {
+    const name = el.name;
+    if (!name) return;
+    if ((el as HTMLInputElement).type === 'checkbox') {
+      data[name] = (el as HTMLInputElement).checked;
+    } else if ((el as HTMLInputElement).type === 'radio') {
+      if ((el as HTMLInputElement).checked) data[name] = (el as HTMLInputElement).value;
+    } else {
+      data[name] = (el as HTMLInputElement).value;
     }
   });
-});
-
-/**
- * リクエスト送信処理
- * 検索処理のリクエストをサーバに送信し、レスポンス処理を受信します。
- * 
- * @param apiType 
- */
-async function sendSearchRequest(apiType: string, actionName: string) {
-  try {
-    // リクエストURL
-    const URL = "http://localhost:8080/api/" + apiType;
-
-    // FormDataをオブジェクトに変換
-    let data: Record<string, string> = getFormValuesAsJson(actionName);
-
-    // サーバーにPOSTリクエストを送信
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    // レスポンスの処理
-    if (response.ok) {
-      const responseData = await response.json();
-      const create = new ScreenMain();
-      create.createElement(responseData);
-      console.log('検索結果:', responseData);
-    } else {
-      // const create = new ScreenMain();
-      // const responseData = await response.json();
-      // create.createElement(responseData);
-      console.error('検索処理に失敗しました:', response.statusText);
-    }
-  } catch (error) {
-    console.error('エラーが発生しました:', error);
-  }
+  data['action'] = actionName;
+  return data;
 }
 
 /**
- * 追加処理
- * 追加処理のリクエスト処理
- * 
- * @param apiType :リクエストtype
+ * ボタンに対して共通の処理をバインドします。
+ * - data-api-type 属性で API 種別を指定
+ * - id 属性は action 名として送信
+ *
+ * 例: <button id="searchBtn" data-api-type="search">検索</button>
  */
-async function sendAddRequest(apiType: string) {
-  try {
-    // リクエストURL
-    const URL = 'http://localhost:8080/api/' + apiType;
+export function initButtonActions(root: Document | Element = document) {
+  const buttons = root.querySelectorAll('button[data-api-type]');
+  buttons.forEach(button => {
+    button.addEventListener('click', async (event) => {
+      const target = event.currentTarget as HTMLButtonElement;
+      const apiType = target.dataset.apiType || '';
+      const action = target.id || '';
 
-    // フォームデータを取得（フォームのinputやtextareaなどから）
-    const formData = new FormData(document.querySelector('form') as HTMLFormElement);
+      // 必要に応じて data-method 等から上書き可能
+      const methodAttr = (target.dataset.method as HttpMethod) || undefined;
 
-    // FormDataをオブジェクトに変換
-    const data: Record<string, string> = {};
-    formData.forEach((value, key) => {
-      data[key] = value.toString();
+      try {
+        await sendAction(apiType, action, { method: methodAttr, showLoading: true });
+      } catch (e) {
+        // 既に sendAction 側でハンドリング
+      }
     });
-
-    // サーバーにPOSTリクエストを送信
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    // レスポンスの処理
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log('検索結果:', responseData);
-    } else {
-      console.error('検索処理に失敗しました:', response.statusText);
-    }
-  } catch (error) {
-    console.error('エラーが発生しました:', error);
-  }
-}
-
-/**
- * 更新処理
- * 更新処理のリクエスト処理
- * 
- * @param apiType :リクエストtype
- */
-async function sendUpdateRequest(apiType: string) {
-  try {
-    // リクエストURL
-    const URL = 'http://localhost:8080/api/' + apiType;
-
-    // フォームデータを取得（フォームのinputやtextareaなどから）
-    const formData = new FormData(document.querySelector('form') as HTMLFormElement);
-
-    // FormDataをオブジェクトに変換
-    const data: Record<string, string> = {};
-    formData.forEach((value, key) => {
-      data[key] = value.toString();
-    });
-
-    // サーバーにPOSTリクエストを送信
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    // レスポンスの処理
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log('検索結果:', responseData);
-    } else {
-      console.error('検索処理に失敗しました:', response.statusText);
-    }
-  } catch (error) {
-    console.error('エラーが発生しました:', error);
-  }
-}
-
-/**
- * 削除処理
- * 削除処理のリクエスト処理
- * 
- * @param apiType :リクエストtype
- */
-async function sendDeleteRequest(apiType: string) {
-  try {
-    // リクエストURL
-    const URL = 'http://localhost:8080/api/' + apiType;
-
-    // フォームデータを取得（フォームのinputやtextareaなどから）
-    const formData = new FormData(document.querySelector('form') as HTMLFormElement);
-
-    // FormDataをオブジェクトに変換
-    const data: Record<string, string> = {};
-    formData.forEach((value, key) => {
-      data[key] = value.toString();
-    });
-
-    // サーバーにPOSTリクエストを送信
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    // レスポンスの処理
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log('検索結果:', responseData);
-    } else {
-      console.error('検索処理に失敗しました:', response.statusText);
-    }
-  } catch (error) {
-    console.error('エラーが発生しました:', error);
-  }
-}
-
-/**
- * リクエスト値格納処理
- * リクエストで使用する値を格納します。
- * 
- * @param actionName 
- * @returns 
- */
-function getFormValuesAsJson(actionName: string): Record<string, string> {
-  const formElements = document.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLFormElement>('input, select, textarea, form');
-  const formData: Record<string, string> = {};
-
-  // 画面入力値をJSON形式で取得する処理
-  formElements.forEach(element => {
-    const name = element.name;
-
-    if (name == 'data') {
-      formData[name] = element.id;
-    }
-    else {
-      formData[name] = element.value;
-    }
   });
-
-  formData['action'] = actionName;
-  return formData;
 }
+
+// デフォルトで初期化（既存のページの互換のため）
+if (typeof document !== 'undefined') {
+  // DOMContentLoaded を待たないで呼ばれる場合があるため、遅延実行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => initButtonActions(document));
+  } else {
+    initButtonActions(document);
+  }
+}
+
+// 開発者向けの簡易使用例（コメント）
+/*
+  // 画面固有の処理をしたい場合
+  import { initButtonActions } from './getButtonAction';
+  initButtonActions();
+
+  // 直接呼び出して細かい制御をする場合
+  sendAction('user/update', 'updateUser', {
+    method: 'POST',
+    data: { id: 1, name: 'hoge' },
+    onSuccess: (res) => { console.log('更新成功', res); }
+  });
+*/
+
+export { sendAction };
